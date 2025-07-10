@@ -1,0 +1,346 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    padding: 20px;
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Contenedor principal */
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Cabecera con botón */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+/* Lista de acciones (visible por defecto) */
+.acciones-lista {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+/* Cuando el formulario está activo, ocultar la lista */
+.formulario-activo .acciones-lista {
+    display: none;
+}
+
+/* Contenedor del formulario (oculto por defecto) */
+.formulario-container {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 80%;
+    max-width: 1200px;
+    z-index: 120;
+    transform: none;
+}
+
+/* Cuando el formulario está activo, mostrarlo */
+.formulario-activo .formulario-container {
+    display: flex;
+    justify-content: center;
+}
+
+/* Estilos para las acciones */
+.accion {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 12px 0;
+    border-bottom: 1px solid #eaeaea;
+    align-items: center;
+}
+
+.accion.cabecera {
+    background: #f1f1f1;
+    padding: 15px 0;
+    /* position: sticky; */
+    top: 0;
+    margin-bottom: 10px;
+    border-radius: 6px;
+}
+
+
+
+.accion.cabecera>*,
+.accion>* {
+    flex: 1;
+    min-width: 100px;
+    padding: 0 5px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.accion>* {
+     flex: 1 0 120px; /* da un ancho mínimo base a todos los campos */
+    font-weight: normal;
+    color: #555;
+    word-break: break-word;
+}
+
+.accion h3 {
+    color: #2c3e50;
+}
+
+.accion a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.accion a:hover {
+    text-decoration: underline;
+}
+
+/* botones editar-borrar */
+.btn-editar, .btn-eliminar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    margin: 0 5px;
+}
+
+.btn-editar i {
+    color: #3498db; /* verde para editar */
+}
+
+.btn-eliminar i {
+    color: #c41a52; /* rojo para eliminar */
+}
+
+.btn-editar:hover i,
+.btn-eliminar:hover i {
+    opacity: 0.7;
+}
+
+/* Botón toggle */
+.toggle-btn {
+    align-self: flex-end;
+    margin: 20px;
+    padding: 12px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    z-index: 150;
+}
+
+.toggle-btn:hover {
+    background-color: #2671a3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos del formulario */
+.formulario {
+     width: 100%;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex; /* Cambiamos grid por flex */
+    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+    gap: 30px;
+}
+
+.column1,
+.column2 {
+    flex: 1; /* Cada columna ocupa igual espacio */
+    min-width: 300px; /* Ancho mínimo para evitar que se hagan muy estrechas */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formulario h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.formulario label {
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: block;
+    color: #2c3e50;
+    font-size: 0.95rem;
+}
+
+.formulario input,
+.formulario select,
+.formulario textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.formulario input[type="checkbox"] {
+    width: auto;
+}
+
+.formulario input:focus,
+.formulario select:focus,
+.formulario textarea:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.formulario textarea {
+    height: 70px;
+    resize: none;  
+}
+
+
+.checkbox-group {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 8px;
+}
+
+ 
+.formulario button[type="submit"] {
+     width: 100%;
+    padding: 12px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.formulario button[type="submit"]:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Fondo oscuro cuando el formulario está activo */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 110;
+}
+
+.formulario-activo .overlay {
+    display: block;
+}
+
+
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .accion.cabecera {
+        display: none;
+    }
+
+    .accion {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .accion>* {
+        flex: 1 1 100%;
+        text-align: left;
+        padding: 5px 0;
+        position: relative;
+        padding-left: 120px;
+    }
+
+    .accion h3 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        padding-left: 0;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+    }
+
+    .accion p::before,
+    .accion a::before {
+        content: attr(data-label);
+        font-weight: 600;
+        display: inline-block;
+        width: 110px;
+        color: #2c3e50;
+        position: absolute;
+        left: 0;
+    }
+
+
+    .formulario-container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .formulario {
+        flex-direction: column;
+        padding: 20px;
+        flex-wrap: nowrap;
+    }
+    .column1,
+    .column2 {
+        width: 100%; /* Ocupa todo el ancho */
+        min-width: 100%; /* Ancho completo */
+        flex: none; /* Elimina el comportamiento flexible */
+        
+    }
+
+     .formulario button[type="submit"] {
+        width: 100%;
+    }
+
+}

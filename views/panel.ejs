@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="main-layout">
+
+        <button id="toggle-formulario" type="button" class="toggle-btn">+ Agregar acción</button>
+
+        <div class="content-wrapper">
+            <div class="acciones-lista">
+                <div class="accion cabecera">
+                </div>
+            </div>
+
+
+            <div class="formulario-container">
+
+                <!-- <div id="formulario-wrapper" class="oculto"> -->
+                <form action="/api/acciones" method="POST" class="formulario">
+                    <div class="column1">
+                        <label>Nombre de la acción:<br>
+                            <input type="text" name="nombre" required>
+                        </label><br>
+                        <label>Asociación/Entidad:<br>
+                            <input type="text" name="asociacionEntidad" required>
+                        </label><br>
+                        <label>Email:<br>
+                            <input type="email" name="email" required>
+                        </label><br>
+                        <label>Teléfono:<br>
+                            <input type="text" name="telefono" required>
+                        </label><br>
+                        <label>Fecha de inicio:<br>
+                            <input type="date" name="fechaInicio" required>
+                        </label><br>
+                        <label>Fecha de fin:<br>
+                            <input type="date" name="fechaFin" required>
+                        </label><br>
+
+                    </div>
+                    <div class="column2">
+                        <label>Horarios:<br>
+                            <input type="text" name="horarios">
+                        </label><br>
+                        <label>Tipo de acción:<br>
+                            <select name="tipoAccion" required>
+                                <option value="consulta">Consulta</option>
+                                <option value="jornada/premio">Jornada/Premio</option>
+                                <option value="uso del espacio">Uso del espacio</option>
+                                <option value="reunión/coordinación">Reunión/Coordinación</option>
+                                <option value="servicio técnico">Servicio técnico</option>
+                                <option value="formación">Formación</option>
+                                <option value="otros">Otros</option>
+                            </select>
+                        </label><br>
+                        <label>Responsable de la acción:<br><br>
+                            <div class="checkbox-group">
+                                <label for=""><input type="checkbox" name="responsableAccion" value="Saregune">
+                                    Saregune</label>
+                                <label for=""><input type="checkbox" name="responsableAccion" value="Elkarteak">
+                                    Elkarteak</label>
+                                <label for="">
+                                    <input type="checkbox" name="responsableAccion" value="Batekin"> Batekin
+                                </label>
+                                <label for="">
+                                    <input type="checkbox" name="responsableAccion" value="AuzoTV"> AuzoTV
+                                </label>
+
+                            </div>
+                        </label>
+                        <label>Descripción:<br>
+                            <textarea name="descripcion"></textarea>
+                        </label><br>
+                        <label>Web:<br>
+                            <input type="url" name="web">
+                        </label><br>
+                        <button type="submit" id="btnEnviar">Añadir acción</button>
+                    </div>
+
+                </form>
+                <!-- </div> -->
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="overlay"></div>
+
+    <script src="/app.js"></script>
+</body>
+
+</html>
