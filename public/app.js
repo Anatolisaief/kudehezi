@@ -1,5 +1,6 @@
 const formulario = document.querySelector('.formulario');
 const listaAcciones = document.querySelector('.acciones-lista');
+const idAccionInput = document.querySelector('#idAccion'); // Input oculto para el ID de la acción
 const nombreInput = document.querySelector('#nombre');
 const asociacionEntidadInput = document.querySelector('#asociacionEntidad');
 const emailInput = document.querySelector('#email');
@@ -8,10 +9,16 @@ const fechaInicioInput = document.querySelector('#fechaInicio');
 const fechaFinInput = document.querySelector('#fechaFin');
 const horariosInput = document.querySelector('#horarios');
 const tipoAccionInput = document.querySelector('#tipoAccion');
-const responsableAccionInput = document.querySelector('#responsableAccion');
-/* const descripcionInput = document.querySelector('#descripcion');
-const webInput = document.querySelector('#web'); */
+const responsableAccionCheckboxes = document.querySelectorAll('input[name="responsableAccion"]');
+const descripcionInput = document.querySelector('#descripcion');
+const webInput = document.querySelector('#web');
 const btnEnviar = document.querySelector('#btnEnviar');
+
+//dialog para confirmar eliminación
+let AccionAEliminarId = null; // Guardamos aquí el ID de la acción a eliminar
+const dialogo = document.getElementById('dialogo-confirmar');
+const btnConfirmar = document.getElementById('confirmarEliminar');
+const btnCancelar = document.getElementById('cancelarEliminar');
 
 
 async function obtenerAcciones() {
@@ -28,7 +35,7 @@ async function obtenerAcciones() {
         // Añadir cabecera siempre antes de las acciones
         const cabecera = document.createElement('div');
         cabecera.classList.add('accion', 'cabecera');
-        ['Nombre', 'Entidad', 'Email', 'Teléfono', 'Fecha Inicio', 'Fecha Fin', 'Horarios', 'Tipo', 'Responsable','Editar/Borrar']
+        ['Nombre', 'Entidad', 'Email', 'Teléfono', 'Fecha Inicio', 'Fecha Fin', 'Horarios', 'Tipo', 'Responsable', 'Descripción', 'Web', 'Editar/Borrar']
             .forEach(texto => {
                 const el = document.createElement(texto === 'Nombre' ? 'h3' : 'p');
                 el.textContent = texto;
@@ -73,16 +80,16 @@ async function obtenerAcciones() {
                 : accion.responsableAccion;
             responsable.textContent = responsables;
 
-           /*  const descripcion = document.createElement('p');
-            descripcion.textContent = accion.descripcion; */
+            const descripcion = document.createElement('p');
+            descripcion.textContent = accion.descripcion;
 
-           /*   const web = document.createElement('a');
+            const web = document.createElement('a');
             web.href = accion.web;
             web.target = "_blank";
-            web.textContent = accion.web; */
+            web.textContent = accion.web;
 
             const divBotones = document.createElement('div');
-            divBotones.classList.add('divBotones'); 
+            divBotones.classList.add('divBotones');
 
             // Crear botón de editar
             const btnEditar = document.createElement('button');
@@ -93,11 +100,10 @@ async function obtenerAcciones() {
             iconoEditar.classList.add('fas', 'fa-edit'); // Font Awesome icon classes
             btnEditar.appendChild(iconoEditar);
 
-            btnEditar.addEventListener('click', () => {
-                // Aquí puedes cargar los datos en el formulario y activar el modo edición
-                // Por ejemplo:
-                formulario.nombre.value = accion.nombre;
-                // etc...
+            btnEditar.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('editando:', accion);
+                cargarFormulario(accion)
                 body.classList.add('formulario-activo');
                 toggleBtn.textContent = '✕ Cerrar';
             });
@@ -110,21 +116,14 @@ async function obtenerAcciones() {
             iconoEliminar.classList.add('fas', 'fa-trash-alt');
             btnEliminar.appendChild(iconoEliminar);
 
-            btnEliminar.addEventListener('click', async () => {
-                if (confirm('¿Estás seguro de que quieres eliminar esta acción?')) {
-                    try {
-                        const response = await fetch(`/api/acciones/${accion._id}`, {
-                            method: 'DELETE'
-                        });
-                        if (response.ok) {
-                            obtenerAcciones(); // Recargar la lista
-                        } else {
-                            alert('Error al eliminar');
-                        }
-                    } catch (err) {
-                        console.error('Error al eliminar:', err);
-                    }
-                }
+            btnEliminar.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                AccionAEliminarId = accion._id; // Guardamos el ID de la acción a eliminar
+
+                dialogo.showModal();// Abre el diálogo de confirmación
+
+
             });
 
             // Añadir todos los elementos al div principal
@@ -137,8 +136,8 @@ async function obtenerAcciones() {
             accionDiv.appendChild(horarios);
             accionDiv.appendChild(tipo);
             accionDiv.appendChild(responsable);
-        /*     accionDiv.appendChild(descripcion);
-            accionDiv.appendChild(web); */
+            accionDiv.appendChild(descripcion);
+            accionDiv.appendChild(web);
             accionDiv.appendChild(divBotones);
             // Añadir botones de acción
             divBotones.appendChild(btnEditar);
@@ -157,17 +156,141 @@ document.addEventListener("DOMContentLoaded", () => {
     obtenerAcciones();
 });
 
-// botón para mostrar/ocultar el formulario
+
+// Botón para mostrar/ocultar el formulario
 const toggleBtn = document.getElementById('toggle-formulario');
 const body = document.body;
 
 toggleBtn.addEventListener('click', () => {
-    body.classList.toggle('formulario-activo');
+    const abriendo = !body.classList.contains('formulario-activo');// Verifica si se está abriendo o cerrando el formulario
 
-    if (body.classList.contains('formulario-activo')) {
+    body.classList.toggle('formulario-activo');// Alterna la clase para mostrar/ocultar el formulario
+
+
+    if (abriendo) {
+        limpiarFormulario(); // Limpiar solo si estás abriendo
         toggleBtn.textContent = '✕ Cerrar';
     } else {
         toggleBtn.textContent = '+ Agregar acción';
+    }// Cambia el texto del botón según el estado
+});
+
+
+// Función para cargar los datos de una acción en el formulario
+function cargarFormulario(accion) {
+
+    formulario.action = `/api/acciones/${accion._id}`;
+    formulario.method = 'POST'; // HTML no soporta PUT directamente
+
+    let inputMethod = formulario.querySelector('input[name="_method"]');
+    if (!inputMethod) {
+        inputMethod = document.createElement('input');
+        inputMethod.type = 'hidden';
+        inputMethod.name = '_method';
+        formulario.appendChild(inputMethod);
+    }
+    inputMethod.value = 'PUT';// Método para indicar que es una actualización
+
+    // Cargar los datos de la acción en el formulario
+    idAccionInput.value = accion._id;
+    nombreInput.value = accion.nombre || '';
+    asociacionEntidadInput.value = accion.asociacionEntidad || '';
+    emailInput.value = accion.email || '';
+    telefonoInput.value = accion.telefono || '';
+    fechaInicioInput.value = accion.fechaInicio ? new Date(accion.fechaInicio).toISOString().split('T')[0] : '';
+    fechaFinInput.value = accion.fechaFin ? new Date(accion.fechaFin).toISOString().split('T')[0] : '';
+    horariosInput.value = accion.horarios || '';
+    tipoAccionInput.value = accion.tipoAccion || '';
+    descripcionInput.value = accion.descripcion || '';
+    webInput.value = accion.web || '';
+
+    // Desmarcar todos los checkboxes responsables
+    responsableAccionCheckboxes.forEach(chk => chk.checked = false);
+
+    // Marcar los que correspondan
+    if (Array.isArray(accion.responsableAccion)) {
+        accion.responsableAccion.forEach(responsable => {
+            const checkbox = Array.from(responsableAccionCheckboxes).find(chk => chk.value === responsable);
+            if (checkbox) checkbox.checked = true;
+        });
+    } else if (typeof accion.responsableAccion === 'string') {
+        const checkbox = Array.from(responsableAccionCheckboxes).find(chk => chk.value === accion.responsableAccion);
+        if (checkbox) checkbox.checked = true;
+    }
+
+    // Cambiar el texto del botón de enviar
+    btnEnviar.textContent = 'Guardar cambios';
+}
+
+// Función para limpiar el formulario
+function limpiarFormulario() {
+    formulario.reset(); // Limpia todos los inputs
+
+    // Desmarcar todos los checkboxes (por si acaso .reset no los limpia)
+    responsableAccionCheckboxes.forEach(chk => chk.checked = false);
+
+    // Restablecer atributos del formulario para modo "crear"
+    formulario.action = '/api/acciones';
+    formulario.method = 'POST';
+
+    // Eliminar el campo _method si existe (de la edición)
+    const methodInput = formulario.querySelector('input[name="_method"]');
+    if (methodInput) methodInput.remove();
+
+    // También limpiar el campo oculto de ID si lo usas
+    idAccionInput.value = '';
+
+    // Restaurar texto del botón de envío
+    btnEnviar.textContent = '+ Agregar acción';
+}
+
+async function eliminarAccion(_id) {
+    try {
+
+        // Desactiva botones para prevenir doble clic
+        btnConfirmar.disabled = true;
+        btnCancelar.disabled = true;
+
+        // Realiza la petición DELETE al servidor
+        const response = await fetch(`/api/acciones/${_id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al eliminar la acción');
+        }
+
+        const data = await response.json();
+        console.log(data);
+
+        if (data.success) {
+            obtenerAcciones(); // Refrescar la lista de acciones
+        } else {
+            console.error('Error al eliminar la acción:', data.message);
+        }
+    } catch (error) {
+        console.error('Error al eliminar la acción:', error);
+    } finally {
+        dialogo.close();
+        AccionAEliminarId = null;
+        btnConfirmar.disabled = false;
+        btnCancelar.disabled = false;
+    }
+
+}
+
+btnConfirmar.addEventListener('click', (e) => {
+    e.preventDefault(); // Evita el envío del formulario
+
+    if (AccionAEliminarId) {
+        eliminarAccion(AccionAEliminarId); // Llama a la función de eliminación
+        AccionAEliminarId = null; // Resetea el ID después de eliminar
     }
 });
 
+btnCancelar.addEventListener('click', (e) => {
+    e.preventDefault(); // Evita el envío del formulario
+    dialogo.close(); // Cierra el diálogo de confirmación
+    AccionAEliminarId = null; // Resetea el ID para evitar eliminar accidentalmente
+});

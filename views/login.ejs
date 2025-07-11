@@ -6,6 +6,17 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="/panel">Ir al panel</a>
+    <h1>Iniciar sesión</h1>
+    <% if (error) { %>
+        <p style="color:red;">
+            <%= error %>
+        </p>
+        <% } %>
+        <h1><%=prueba%></h1>
+            <form action="/login" class="formulario" method="POST">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
 </body>
 </html>

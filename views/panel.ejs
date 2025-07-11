@@ -6,12 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
     <div class="main-layout">
-
+        <a href="/logout">Cerrar sesión</a>
         <button id="toggle-formulario" type="button" class="toggle-btn">+ Agregar acción</button>
 
         <div class="content-wrapper">
@@ -26,32 +28,33 @@
                 <!-- <div id="formulario-wrapper" class="oculto"> -->
                 <form action="/api/acciones" method="POST" class="formulario">
                     <div class="column1">
+                        <input type="hidden" name="idAccion" value="" id="idAccion">
                         <label>Nombre de la acción:<br>
-                            <input type="text" name="nombre" required>
+                            <input type="text" name="nombre" id="nombre" required>
                         </label><br>
                         <label>Asociación/Entidad:<br>
-                            <input type="text" name="asociacionEntidad" required>
+                            <input type="text" name="asociacionEntidad" id="asociacionEntidad" required>
                         </label><br>
                         <label>Email:<br>
-                            <input type="email" name="email" required>
+                            <input type="email" name="email" id="email" required>
                         </label><br>
                         <label>Teléfono:<br>
-                            <input type="text" name="telefono" required>
+                            <input type="text" name="telefono" id="telefono" required>
                         </label><br>
                         <label>Fecha de inicio:<br>
-                            <input type="date" name="fechaInicio" required>
+                            <input type="date" name="fechaInicio" id="fechaInicio" required>
                         </label><br>
                         <label>Fecha de fin:<br>
-                            <input type="date" name="fechaFin" required>
+                            <input type="date" name="fechaFin" id="fechaFin" required>
                         </label><br>
 
                     </div>
                     <div class="column2">
                         <label>Horarios:<br>
-                            <input type="text" name="horarios">
+                            <input type="text" name="horarios" id="horarios">
                         </label><br>
                         <label>Tipo de acción:<br>
-                            <select name="tipoAccion" required>
+                            <select name="tipoAccion" id="tipoAccion" required>
                                 <option value="consulta">Consulta</option>
                                 <option value="jornada/premio">Jornada/Premio</option>
                                 <option value="uso del espacio">Uso del espacio</option>
@@ -63,24 +66,24 @@
                         </label><br>
                         <label>Responsable de la acción:<br><br>
                             <div class="checkbox-group">
-                                <label for=""><input type="checkbox" name="responsableAccion" value="Saregune">
-                                    Saregune</label>
-                                <label for=""><input type="checkbox" name="responsableAccion" value="Elkarteak">
-                                    Elkarteak</label>
-                                <label for="">
-                                    <input type="checkbox" name="responsableAccion" value="Batekin"> Batekin
-                                </label>
-                                <label for="">
-                                    <input type="checkbox" name="responsableAccion" value="AuzoTV"> AuzoTV
-                                </label>
+                                <input type="checkbox" name="responsableAccion" value="Saregune" id="Saregune">
+                                <label for="Saregune">Saregune</label>
 
+                                <input type="checkbox" name="responsableAccion" value="Elkarteak" id="Elkarteak">
+                                <label for="Elkarteak">Elkarteak</label>
+
+                                <input type="checkbox" name="responsableAccion" value="Batekin" id="Batekin">
+                                <label for="Batekin">Batekin</label>
+
+                                <input type="checkbox" name="responsableAccion" value="AuzoTV" id="AuzoTV">
+                                <label for="AuzoTV">AuzoTV</label>
                             </div>
                         </label>
                         <label>Descripción:<br>
-                            <textarea name="descripcion"></textarea>
+                            <textarea name="descripcion" id="descripcion"></textarea>
                         </label><br>
                         <label>Web:<br>
-                            <input type="url" name="web">
+                            <input type="url" name="web" id="web">
                         </label><br>
                         <button type="submit" id="btnEnviar">Añadir acción</button>
                     </div>
@@ -94,6 +97,15 @@
     </div>
 
     <div class="overlay"></div>
+    <dialog id="dialogo-confirmar">
+        <form method="dialog" class="dialogo-contenido">
+            <p>¿Estás seguro de que quieres eliminar esta acción?</p>
+            <menu>
+                <button id="cancelarEliminar" value="cancel">Cancelar</button>
+                <button id="confirmarEliminar" value="confirm">Eliminar</button>
+            </menu>
+        </form>
+    </dialog>
 
     <script src="/app.js"></script>
 </body>
