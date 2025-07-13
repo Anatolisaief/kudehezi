@@ -10,7 +10,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "ejs": "^3.1.10",
@@ -19,5 +18,14 @@
     "method-override": "^3.0.0",
     "mongodb": "^6.17.0",
     "nodemon": "^3.1.10"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anatolisaief/kudehezi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Anatolisaief/kudehezi/issues"
+  },
+  "homepage": "https://github.com/Anatolisaief/kudehezi#readme",
+  "description": ""
 }

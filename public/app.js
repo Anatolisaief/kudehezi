@@ -14,7 +14,7 @@ const descripcionInput = document.querySelector('#descripcion');
 const webInput = document.querySelector('#web');
 const btnEnviar = document.querySelector('#btnEnviar');
 
-//dialog para confirmar eliminación
+// dialog para confirmar eliminación
 let AccionAEliminarId = null; // Guardamos aquí el ID de la acción a eliminar
 const dialogo = document.getElementById('dialogo-confirmar');
 const btnConfirmar = document.getElementById('confirmarEliminar');
@@ -35,7 +35,7 @@ async function obtenerAcciones() {
         // Añadir cabecera siempre antes de las acciones
         const cabecera = document.createElement('div');
         cabecera.classList.add('accion', 'cabecera');
-        ['Nombre', 'Entidad', 'Email', 'Teléfono', 'Fecha Inicio', 'Fecha Fin', 'Horarios', 'Tipo', 'Responsable', 'Descripción', 'Web', 'Editar/Borrar']
+        ['Nombre', 'Entidad', 'Email', 'Teléfono', 'Fecha Inicio', 'Fecha Fin', 'Editar/Borrar']
             .forEach(texto => {
                 const el = document.createElement(texto === 'Nombre' ? 'h3' : 'p');
                 el.textContent = texto;
@@ -48,6 +48,10 @@ async function obtenerAcciones() {
 
             const accionDiv = document.createElement('div');
             accionDiv.classList.add('accion');
+
+            //campos principales
+            const detalles = document.createElement('div');
+            detalles.classList.add('detalles');
 
             const nombre = document.createElement('h3');
             nombre.textContent = accion.nombre;
@@ -66,6 +70,13 @@ async function obtenerAcciones() {
 
             const fechaFin = document.createElement('p');
             fechaFin.textContent = new Date(accion.fechaFin).toLocaleDateString();
+
+            // campos ocultos por defecto
+            const detallesExtra = document.createElement('div');
+            detallesExtra.classList.add('detalles-extra');
+            detallesExtra.style.display = 'none';
+
+
 
             const horarios = document.createElement('p');
             horarios.textContent = accion.horarios;
@@ -87,6 +98,46 @@ async function obtenerAcciones() {
             web.href = accion.web;
             web.target = "_blank";
             web.textContent = accion.web;
+
+            // Añadir atributos data-label para las etiquetas
+            horarios.setAttribute('data-label', 'Horarios');
+            tipo.setAttribute('data-label', 'Tipo');
+            responsable.setAttribute('data-label', 'Responsable');
+            descripcion.setAttribute('data-label', 'Descripción');
+            web.setAttribute('data-label', 'Web');
+
+            // Añadir los secundarios al contenedor oculto
+            detallesExtra.appendChild(horarios);
+            detallesExtra.appendChild(tipo);
+            detallesExtra.appendChild(responsable);
+            detallesExtra.appendChild(descripcion);
+            detallesExtra.appendChild(web);
+
+            // Crear botón de toggle
+            const btnToggle = document.createElement('button');
+            btnToggle.classList.add('btn-toggle-detalles');
+
+            // Crear el ícono (flecha hacia abajo inicialmente)
+            const iconoToggle = document.createElement('i');
+            iconoToggle.classList.add('fas', 'fa-chevron-down');
+
+            // Añadir el ícono al botón
+            btnToggle.appendChild(iconoToggle);
+
+            // Evento para mostrar/ocultar detalles
+            btnToggle.addEventListener('click', () => {
+                const mostrando = detallesExtra.style.display === 'flex';
+
+                if (mostrando) {
+                    detallesExtra.style.display = 'none';
+                    iconoToggle.classList.remove('fa-chevron-up');
+                    iconoToggle.classList.add('fa-chevron-down');
+                } else {
+                    detallesExtra.style.display = 'flex';
+                    iconoToggle.classList.remove('fa-chevron-down');
+                    iconoToggle.classList.add('fa-chevron-up');
+                }
+            });
 
             const divBotones = document.createElement('div');
             divBotones.classList.add('divBotones');
@@ -127,23 +178,21 @@ async function obtenerAcciones() {
             });
 
             // Añadir todos los elementos al div principal
-            accionDiv.appendChild(nombre);
-            accionDiv.appendChild(entidad);
-            accionDiv.appendChild(email);
-            accionDiv.appendChild(telefono);
-            accionDiv.appendChild(fechaInicio);
-            accionDiv.appendChild(fechaFin);
-            accionDiv.appendChild(horarios);
-            accionDiv.appendChild(tipo);
-            accionDiv.appendChild(responsable);
-            accionDiv.appendChild(descripcion);
-            accionDiv.appendChild(web);
-            accionDiv.appendChild(divBotones);
+            detalles.appendChild(nombre);
+            detalles.appendChild(entidad);
+            detalles.appendChild(email);
+            detalles.appendChild(telefono);
+            detalles.appendChild(fechaInicio);
+            detalles.appendChild(fechaFin);
+
             // Añadir botones de acción
+            divBotones.appendChild(btnToggle);
             divBotones.appendChild(btnEditar);
             divBotones.appendChild(btnEliminar);
-            accionDiv.appendChild(divBotones);
-
+            detalles.appendChild(divBotones);
+            
+            accionDiv.appendChild(detalles);
+            accionDiv.appendChild(detallesExtra);
             listaAcciones.appendChild(accionDiv);
         });
     } catch (error) {

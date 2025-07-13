@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: #f5f7fa;
+    background-color: #d5e1f4;
     padding: 20px;
     min-height: 100vh;
     color: #333;
@@ -72,19 +72,21 @@ body {
 }
 
 /* Estilos para las acciones */
+
+
 .accion {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    /* Elementos en columna */
     padding: 12px 0;
     border-bottom: 1px solid #eaeaea;
-    align-items: center;
 }
 
 .accion.cabecera {
-    background: #f1f1f1;
+    display: flex;
+    flex-direction: row;
+    background: #567e9c;
     padding: 15px 0;
-    /* position: sticky; */
-    top: 0;
     margin-bottom: 10px;
     border-radius: 6px;
 }
@@ -97,20 +99,32 @@ body {
     min-width: 100px;
     padding: 0 5px;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
+}
+.accion.cabecera>*{
+    color: white;
+    /* texto blanco para la cabecera */
 }
 
 .accion>* {
-     flex: 1 0 120px; /* da un ancho mínimo base a todos los campos */
+    flex: 1 0 120px;
+    /* da un ancho mínimo base a todos los campos */
     font-weight: normal;
-    color: #555;
+    color: #444444;
     word-break: break-word;
+    
 }
 
-.accion h3 {
-    color: #2c3e50;
+.accion{
+    background-color: #efefef;
+    border-bottom: 1px solid #c6c6c6;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+
 
 .accion a {
     color: #3498db;
@@ -122,7 +136,9 @@ body {
 }
 
 /* botones editar-borrar */
-.btn-editar, .btn-eliminar {
+.btn-toggle-detalles,
+.btn-editar,
+.btn-eliminar {
     background: none;
     border: none;
     cursor: pointer;
@@ -130,13 +146,6 @@ body {
     margin: 0 5px;
 }
 
-.btn-editar i {
-    color: #3498db; /* verde para editar */
-}
-
-.btn-eliminar i {
-    color: #c41a52; /* rojo para eliminar */
-}
 
 .btn-editar:hover i,
 .btn-eliminar:hover i {
@@ -167,22 +176,26 @@ body {
 
 /* Estilos del formulario */
 .formulario {
-     width: 100%;
+    width: 100%;
     background: white;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     max-height: 90vh;
     overflow-y: auto;
-    display: flex; /* Cambiamos grid por flex */
-    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+    display: flex;
+    /* Cambiamos grid por flex */
+    flex-wrap: wrap;
+    /* Permitir que los elementos se envuelvan */
     gap: 30px;
 }
 
 .column1,
 .column2 {
-    flex: 1; /* Cada columna ocupa igual espacio */
-    min-width: 300px; /* Ancho mínimo para evitar que se hagan muy estrechas */
+    flex: 1;
+    /* Cada columna ocupa igual espacio */
+    min-width: 300px;
+    /* Ancho mínimo para evitar que se hagan muy estrechas */
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -228,7 +241,7 @@ body {
 
 .formulario textarea {
     height: 70px;
-    resize: none;  
+    resize: none;
 }
 
 
@@ -238,9 +251,9 @@ body {
     margin-top: 8px;
 }
 
- 
+
 .formulario button[type="submit"] {
-     width: 100%;
+    width: 100%;
     padding: 12px;
     background-color: #3498db;
     color: white;
@@ -275,96 +288,153 @@ body {
     display: block;
 }
 
-/* dialogo */
-.dialogo-contenido {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+/* estilos para los detalles */
+.detalles {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
 }
 
-menu {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
+.detalles > * {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
 }
-/* Estilo base para el diálogo */
+
+
+/* Estilos para los detalles extra */
+
+.detalles-extra {
+    display: none;
+    /* Oculto por defecto */
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+    background: #efefef;
+    margin-top: 30px;
+}
+
+/* Estilos para cada elemento dentro de detalles-extra */
+.detalles-extra p,
+.detalles-extra a {
+    flex: 1;
+    min-width: 150px;
+    padding: 10px;
+
+}
+
+.detalles-extra a {
+    color: #3498db;
+    text-decoration: none;
+    display: inline-block;
+    word-break: break-all;
+}
+
+.detalles-extra a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para las etiquetas de los detalles */
+.detalles-extra p::before {
+    content: attr(data-label);
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #707071;
+    margin-bottom: 20px;
+}
+
+/* Botón para mostrar/ocultar detalles */
+.btn-toggle-detalles {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-toggle-detalles:hover {
+    background-color: #e9ecef;
+}
+
+
+
+/* Contenedor de botones de acción */
+.divBotones {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #2c3e50;
+}
+
+/* dialogo */
+
 #dialogo-confirmar {
-  padding: 20px 30px;
-  border: none;
-  border-radius: 12px;
-  background-color: #ffffff;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  max-width: 400px;
-  width: 90%;
-  color: #333;
-  font-size: 0.95rem;
-  animation: fadeInDialog 0.25s ease-out;
-  z-index: 200;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 30px;
+    border: none;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    color: #333;
+    font-size: 0.95rem;
+    z-index: 200;
+    text-align: center;
 }
 
 /* Fondo oscuro detrás del diálogo */
 #dialogo-confirmar::backdrop {
-  background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* Contenido del formulario dentro del diálogo */
-#dialogo-confirmar .dialogo-contenido {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+/* Texto */
+#dialogo-confirmar p {
+    margin-bottom: 20px;
+    font-weight: 500;
 }
 
-/* Botones del menú */
-#dialogo-confirmar menu {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-}
-
-/* Estilo común para los botones */
+/* Contenedor de botones */
 #dialogo-confirmar button {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.25s, transform 0.2s;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.25s, transform 0.2s;
+    margin: 0 8px;
+    min-width: 100px;
 }
 
 /* Botón cancelar */
 #cancelarEliminar {
-  background-color: #e0e0e0;
-  color: #333;
+    background-color: #e0e0e0;
+    color: #333;
 }
 
 #cancelarEliminar:hover {
-  background-color: #d5d5d5;
-  transform: translateY(-1px);
+    background-color: #d5d5d5;
+    transform: translateY(-1px);
 }
 
-/* Botón confirmar eliminar */
+/* Botón eliminar */
 #confirmarEliminar {
-  background-color: #c41a52;
-  color: white;
+    background-color: #c41a52;
+    color: white;
 }
 
 #confirmarEliminar:hover {
-  background-color: #a01743;
-  transform: translateY(-1px);
+    background-color: #a01743;
+    transform: translateY(-1px);
 }
 
-/* Animación de entrada */
-@keyframes fadeInDialog {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+
+
 
 
 
@@ -421,15 +491,17 @@ menu {
         padding: 20px;
         flex-wrap: nowrap;
     }
+
     .column1,
     .column2 {
-        width: 100%; /* Ocupa todo el ancho */
-        min-width: 100%; /* Ancho completo */
-        flex: none; /* Elimina el comportamiento flexible */
-        
+        width: 100%;
+        min-width: 100%;
+        flex: none;
+        /* Elimina el comportamiento flexible */
+
     }
 
-     .formulario button[type="submit"] {
+    .formulario button[type="submit"] {
         width: 100%;
     }
 
