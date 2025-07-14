@@ -35,7 +35,7 @@ async function obtenerAcciones() {
         // Añadir cabecera siempre antes de las acciones
         const cabecera = document.createElement('div');
         cabecera.classList.add('accion', 'cabecera');
-        ['Nombre', 'Entidad', 'Email', 'Teléfono', 'Fecha Inicio', 'Fecha Fin', 'Editar/Borrar']
+        ['Nombre', 'Entidad', 'Email', 'Teléfono', 'Fecha Inicio', 'Fecha Fin', 'Gestionar']
             .forEach(texto => {
                 const el = document.createElement(texto === 'Nombre' ? 'h3' : 'p');
                 el.textContent = texto;
@@ -116,6 +116,7 @@ async function obtenerAcciones() {
             // Crear botón de toggle
             const btnToggle = document.createElement('button');
             btnToggle.classList.add('btn-toggle-detalles');
+            btnToggle.title = 'Mostrar más'; // tooltip
 
             // Crear el ícono (flecha hacia abajo inicialmente)
             const iconoToggle = document.createElement('i');
@@ -162,6 +163,7 @@ async function obtenerAcciones() {
             // Botón de eliminar
             const btnEliminar = document.createElement('button');
             btnEliminar.classList.add('btn-eliminar');
+            btnEliminar.title = 'Borrar'; // tooltip
 
             const iconoEliminar = document.createElement('i');
             iconoEliminar.classList.add('fas', 'fa-trash-alt');

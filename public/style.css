@@ -20,6 +20,28 @@ body {
     position: relative;
 }
 
+#cerrar-sesion {
+    color: white;
+    text-decoration: none;
+    background-color:#194f74;
+    text-align: center;
+    width: 150px;
+    padding: 10px 5px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+#cerrar-sesion i {
+    margin-right: 5px;
+}
+
+#cerrar-sesion:hover {
+    background-color: #0f2e44;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    color: tomato;
+}
+
 .content-wrapper {
     flex: 1;
     display: flex;
@@ -78,8 +100,13 @@ body {
     display: flex;
     flex-direction: column;
     /* Elementos en columna */
-    padding: 12px 0;
-    border-bottom: 1px solid #eaeaea;
+    /*  padding: 12px 0; */
+    padding: 10px 0;
+    background-color: #efefef;
+    border-bottom: 1px solid #c6c6c6;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .accion.cabecera {
@@ -97,32 +124,26 @@ body {
 .accion>* {
     flex: 1;
     min-width: 100px;
-    padding: 0 5px;
+    /* padding: 0 5px; */
     text-align: center;
     font-size: 1rem;
     font-weight: 600;
 }
-.accion.cabecera>*{
+
+.accion.cabecera>* {
     color: white;
     /* texto blanco para la cabecera */
 }
 
 .accion>* {
-    flex: 1 0 120px;
+    flex: 1 0 70px;
     /* da un ancho mínimo base a todos los campos */
     font-weight: normal;
     color: #444444;
     word-break: break-word;
-    
+
 }
 
-.accion{
-    background-color: #efefef;
-    border-bottom: 1px solid #c6c6c6;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
 
 
@@ -181,7 +202,6 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    max-height: 90vh;
     overflow-y: auto;
     display: flex;
     /* Cambiamos grid por flex */
@@ -293,10 +313,10 @@ body {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    gap: 10px;
+    /* gap: 10px; */
 }
 
-.detalles > * {
+.detalles>* {
     flex: 1;
     min-width: 120px;
     text-align: center;
@@ -310,9 +330,9 @@ body {
     /* Oculto por defecto */
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 15px;
     background: #efefef;
-    margin-top: 30px;
+    margin-top: 25px;
+    /* margin-bottom: 15px; */
 }
 
 /* Estilos para cada elemento dentro de detalles-extra */
@@ -342,7 +362,7 @@ body {
     font-weight: 600;
     font-size: 0.9rem;
     color: #707071;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 /* Botón para mostrar/ocultar detalles */
@@ -362,7 +382,8 @@ body {
 /* Contenedor de botones de acción */
 .divBotones {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 20px;
     align-items: center;
     color: #2c3e50;
 }

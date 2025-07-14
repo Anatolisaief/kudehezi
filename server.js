@@ -48,23 +48,26 @@ const client = new mongoDb.MongoClient(conn_str);
 // y manejar errores de conexión
 
 let conn;
+let db;
 
-try {
-    conn = await client.connect();
-    console.log('Conectado a MongoDB');
-} catch (err) {
-    console.log(err);
-    console.log('No se pudo conectar a MongoDB');
+async function main() {
+    try {
+        await client.connect();
+        console.log('Conectado a MongoDB');
+        db = client.db('kudehezi');
+
+        // Aquí define las rutas que usan `db`:
+        app.get('/', (req, res) => {
+            res.render('login', { error: null, prueba: "enviando datos desde el back" });
+        });
+
+        app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
+    } catch (err) {
+        console.error('Error conectando a MongoDB:', err);
+    }
 }
 
-let db = conn.db('kudehezi');
 
-
-// rutas
-
-app.get('/', (req, res) => {
-    res.render('login', { error: null, prueba: "enviando datos desde el back" }); // Renderiza la vista 'login.ejs' en la ruta raíz
-});
 
 app.get('/panel', (req, res) => {
     if (!req.session.user) return res.redirect('/');
@@ -73,14 +76,34 @@ app.get('/panel', (req, res) => {
 
 // ruta para crear un usuario a traves de thunderclient
 app.post('/register', async (req, res) => {
-    const { email, password } = req.body;
+     const { nombre, edad, codigoPostal, telefono, email, password } = req.body;
+
     const existingUser = await db.collection('users').findOne({ email });
     if (existingUser) {
         return res.status(400).json({ error: 'El usuario ya existe' });
     }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    await db.collection('users').insertOne({ email, password: hashedPassword });
-    res.status(201).json({ message: 'Usuario creado exitosamente' });
+    await db.collection('users').insertOne({
+        nombre,
+        edad: parseInt(edad),
+        codigoPostal,
+        telefono,
+        email,
+        password: hashedPassword
+    });
+
+    res.redirect('/login');
+});
+
+// Ruta para mostrar el formulario de registro
+app.get('/register', (req, res) => {
+    res.render('register', { error: null });
+});
+
+// Ruta para mostrar el formulario de login
+app.get('/login', (req, res) => {
+      res.render('login', { error: null, prueba: 'Hola, prueba de variable' }); 
 });
 
 // Ruta para iniciar sesión
@@ -234,6 +257,7 @@ app.post('/api/acciones/:id', async (req, res) => {
     }
 });
 
+// Ruta para eliminar una acción
 app.delete('/api/acciones/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -252,4 +276,6 @@ app.delete('/api/acciones/:id', async (req, res) => {
 });
 
 
-app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
+
+
+main();
