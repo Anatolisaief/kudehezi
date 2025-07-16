@@ -192,7 +192,7 @@ async function obtenerAcciones() {
             divBotones.appendChild(btnEditar);
             divBotones.appendChild(btnEliminar);
             detalles.appendChild(divBotones);
-            
+
             accionDiv.appendChild(detalles);
             accionDiv.appendChild(detallesExtra);
             listaAcciones.appendChild(accionDiv);
@@ -329,6 +329,29 @@ async function eliminarAccion(_id) {
         btnCancelar.disabled = false;
     }
 
+}
+
+//tostadas
+function showToast(message, type = 'error') {
+    const toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) return;
+
+    const toast = document.createElement("div");
+    toast.classList.add("toast");
+
+    // Si quieres diferentes colores según el tipo, puedes agregar clases aquí:
+    if (type === 'error') {
+        toast.style.backgroundColor = "#fd6478"; // rojo
+    } else if (type === 'success' || type === 'info') {
+        toast.style.backgroundColor = "#2196F3"; // azul para ambos
+    }
+
+    toast.textContent = message;
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
 }
 
 btnConfirmar.addEventListener('click', (e) => {

@@ -6,10 +6,11 @@ import mongoDb from 'mongodb';
 import { ObjectId } from 'mongodb';
 import session from 'express-session';
 import bcrypt from 'bcrypt';
+import dotent from 'dotenv';
 import methodOverride from 'method-override';
 
-
-const PORT = 3000;
+dotent.config(); // Cargar variables de entorno desde .env
+const PORT = process.env.PORT; // Puerto del servidor, se puede configurar en .env
 const app = express();
 
 // Estas líneas son necesarias para obtener __dirname en módulos ES6
@@ -32,9 +33,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 
 // Configuración de la sesión
-// Asegúrate de instalar express-session con npm install express-session
+
 app.use(session({
-    secret: 'mi_clave_secreta',
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: false
 }));
@@ -47,7 +48,6 @@ const client = new mongoDb.MongoClient(conn_str);
 //connectar a la base de datos
 // y manejar errores de conexión
 
-let conn;
 let db;
 
 async function main() {
@@ -76,7 +76,7 @@ app.get('/panel', (req, res) => {
 
 // ruta para crear un usuario a traves de thunderclient
 app.post('/register', async (req, res) => {
-     const { nombre, edad, codigoPostal, telefono, email, password } = req.body;
+     const { nombre, fechaNacimiento, codigoPostal, telefono, email, password } = req.body;
 
     const existingUser = await db.collection('users').findOne({ email });
     if (existingUser) {
@@ -86,7 +86,7 @@ app.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     await db.collection('users').insertOne({
         nombre,
-        edad: parseInt(edad),
+        fechaNacimento: new Date(fechaNacimiento), 
         codigoPostal,
         telefono,
         email,
@@ -103,7 +103,9 @@ app.get('/register', (req, res) => {
 
 // Ruta para mostrar el formulario de login
 app.get('/login', (req, res) => {
-      res.render('login', { error: null, prueba: 'Hola, prueba de variable' }); 
+     const error = req.session.error;
+    delete req.session.error; // borra el error después de mostrarlo
+    res.render('login', { error }); 
 });
 
 // Ruta para iniciar sesión
@@ -111,10 +113,16 @@ app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const user = await db.collection('users').findOne({ email });
 
-    if (!user) return res.render('login', { error: 'Usuario no encontrado' });
+    if (!user) {
+        req.session.error = 'Datos incorrectos';
+        return res.redirect('/login'); // redirige en lugar de renderizar
+    }
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.render('login', { error: 'Contraseña incorrecta' });
+    if (!match) {
+        req.session.error = 'Datos incorrectos';
+        return res.redirect('/login');
+    }
 
     req.session.user = user;
     res.redirect('/panel');

@@ -12,30 +12,31 @@
 </head>
 
 <body>
-    <div class="container-registro">
-        <form action="/register" method="POST">
-            <label>Nombre:</label>
-            <input type="text" name="nombre" required><br>
+    <div id="toast-container"></div>
 
-            <label>Edad:</label>
-            <input type="number" name="edad" required><br>
-
-            <label>Código Postal:</label>
-            <input type="text" name="codigoPostal" required><br>
-
-            <label>Teléfono:</label>
-            <input type="text" name="telefono" required><br>
-
-            <label>Email:</label>
-            <input type="email" name="email" required><br>
-
-            <label>Contraseña:</label>
-            <input type="password" name="password" required><br>
-
-            <button type="submit">Crear usuario</button>
-        </form>
-        <p>¿Ya tienes una cuenta? <a href="/login"><i class="fa-solid fa-arrow-right-to-bracket"></i> Inicia sesión</a></p>
+    <h1 class="register">KUDEHEZI</h1>
+    <div class="main-register ">
+        <div class="container-registro">
+            <h2 class="register">Registro de Usuario</h2>
+            <form action="/register" method="POST">
+                <label>Nombre*<br><input type="text" name="nombre" required></label>
+                <br>
+                <label>Fecha de nacimiento<br><input type="date" name="fechaNacimiento"></label>
+                <br>
+                <label>Código Postal<br><input type="text" name="codigoPostal"></label>
+                <br>
+                <label>Teléfono<br><input type="text" name="telefono"></label>
+                <br>
+                <label>Email*<br> <input type="email" name="email" required></label>
+                <br>
+                <label>Contraseña*<br><input type="password" name="password" required></label>
+                <br>
+                <button type="submit" id="btnEnviar">Crear usuario</button>
+            </form>
+            <p>¿Ya tienes una cuenta? <a href="/login"> Inicia sesión</a></p>
+        </div>
     </div>
+<script src="/app.js"></script>
 
 </body>
 

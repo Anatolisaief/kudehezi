@@ -1,17 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Oswald:wght@200..700&display=swap');
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    
 }
 
 body {
-    background-color: #d5e1f4;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(to right, #effafd, #ceecfa);
     padding: 20px;
     min-height: 100vh;
     color: #333;
 }
 
+/* register y login*/
+
+.main-register,
+.main-login {
+    display: flex;
+    flex-direction: column;
+     position: relative; 
+    justify-content: center;
+    align-items: center;
+}
+.container-registro,
+.container-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    width: 600px;
+}
+.container-login {
+    width: 400px;
+}
+
+.container-registro form{
+    margin-top: 20px;
+    width: 100%;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.register{
+    text-align: center;
+    
+}
+h1.register {
+    font-family: "Oswald", sans-serif;
+    font-size: 4rem;
+    margin-bottom: 4rem;
+    margin-top: 0.5rem;
+    color: #7cb2e4;
+}
+
+h2.register {
+    color: #587c9e;
+    font-size: 1.3rem;
+    
+}
+.container-login h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    margin-top: 40px;
+}
+.container-registro label {
+    font-weight: 500;
+    display: block;
+    color: #2c3e50;
+    font-size: 0.95rem;
+}
+
+.container-registro input
+{
+    width: 100%;
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    margin-top: 5px;
+}
+.container-registro input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.container-registro p,
+.container-login p {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #555;
+}
+.container-registro a,
+.container-login a {
+    color: #3498db;
+    text-decoration: none;
+}
+.container-registro a:hover,
+.container-login a:hover {
+    text-decoration: underline;
+}
+
+
+/* panel */
 /* Contenedor principal */
 .main-layout {
     display: flex;
@@ -82,9 +183,11 @@ body {
     right: 0;
     margin: auto;
     width: 80%;
-    max-width: 1200px;
+    max-width: 1000px;
     z-index: 120;
     transform: none;
+    padding-bottom: 30px;
+   
 }
 
 /* Cuando el formulario está activo, mostrarlo */
@@ -143,9 +246,6 @@ body {
     word-break: break-word;
 
 }
-
-
-
 
 .accion a {
     color: #3498db;
@@ -218,7 +318,7 @@ body {
     /* Ancho mínimo para evitar que se hagan muy estrechas */
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
 }
 
 .formulario h2 {
@@ -239,8 +339,9 @@ body {
 .formulario input,
 .formulario select,
 .formulario textarea {
+    margin-top: 5px;
     width: 100%;
-    padding: 12px;
+    padding: 5px;
     border-radius: 6px;
     border: 1px solid #ddd;
     font-size: 0.95rem;
@@ -254,43 +355,47 @@ body {
 .formulario input:focus,
 .formulario select:focus,
 .formulario textarea:focus {
+   
     border-color: #3498db;
     outline: none;
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
 .formulario textarea {
-    height: 70px;
+    height: 50px;
     resize: none;
 }
 
 
 .checkbox-group {
+    margin-top: 8px;
     display: flex;
     justify-content: space-evenly;
-    margin-top: 8px;
 }
 
 
-.formulario button[type="submit"] {
-    width: 100%;
-    padding: 12px;
+#btnEnviar {
+  width: 150px;
+    padding: 8px;
     background-color: #3498db;
     color: white;
     border: none;
     border-radius: 6px;
     font-size: 1rem;
     cursor: pointer;
-    margin-top: 10px;
+    margin: 8px auto 0 auto; /* Esto lo centra horizontalmente */
+    display: block;
     transition: all 0.3s;
     font-weight: 600;
 }
 
-.formulario button[type="submit"]:hover {
+#btnEnviar:hover {
     background-color: #2980b9;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
+
+
 
 /* Fondo oscuro cuando el formulario está activo */
 .overlay {
@@ -349,6 +454,7 @@ body {
     text-decoration: none;
     display: inline-block;
     word-break: break-all;
+    margin-top: 15px;
 }
 
 .detalles-extra a:hover {
@@ -454,6 +560,38 @@ body {
     transform: translateY(-1px);
 }
 
+
+/* toasts */
+#toast-container {
+    text-align: center;
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+}
+
+.toast {
+    background-color: #fd6478; 
+    color: white;
+    padding: 16px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    min-width: 200px;
+    font-family: sans-serif;
+}
+
+@keyframes fadein {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeout {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-20px); }
+}
 
 
 
