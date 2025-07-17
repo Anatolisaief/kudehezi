@@ -38,6 +38,14 @@
     </div>
 <script src="/app.js"></script>
 
+<% if (error) { %>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        showToast("<%= error %>", 'error');
+    });
+</script>
+<% } %>
+
 </body>
 
 </html>

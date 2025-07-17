@@ -58,7 +58,7 @@ async function main() {
 
         // Aquí define las rutas que usan `db`:
         app.get('/', (req, res) => {
-            res.render('login', { error: null, prueba: "enviando datos desde el back" });
+             res.render('login', { error: null, success: null });
         });
 
         app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
@@ -76,36 +76,42 @@ app.get('/panel', (req, res) => {
 
 // ruta para crear un usuario a traves de thunderclient
 app.post('/register', async (req, res) => {
-     const { nombre, fechaNacimiento, codigoPostal, telefono, email, password } = req.body;
+    const { nombre, fechaNacimiento, codigoPostal, telefono, email, password } = req.body;
 
     const existingUser = await db.collection('users').findOne({ email });
     if (existingUser) {
-        return res.status(400).json({ error: 'El usuario ya existe' });
+        req.session.error = 'El usuario ya existe';
+        return res.redirect('/register'); // redirige con el error en la sesión
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     await db.collection('users').insertOne({
         nombre,
-        fechaNacimento: new Date(fechaNacimiento), 
+        fechaNacimento: new Date(fechaNacimiento),
         codigoPostal,
         telefono,
         email,
         password: hashedPassword
     });
 
+    req.session.success = 'Usuario registrado con éxito';
     res.redirect('/login');
 });
 
 // Ruta para mostrar el formulario de registro
 app.get('/register', (req, res) => {
-    res.render('register', { error: null });
+    const error = req.session.error;
+    delete req.session.error;
+    res.render('register', { error });
 });
 
 // Ruta para mostrar el formulario de login
 app.get('/login', (req, res) => {
-     const error = req.session.error;
-    delete req.session.error; // borra el error después de mostrarlo
-    res.render('login', { error }); 
+    const error = req.session.error;
+    const success = req.session.success;
+    delete req.session.error; // Elimina el mensaje de error después de mostrarlo
+    delete req.session.success;
+    res.render('login', { error, success });
 });
 
 // Ruta para iniciar sesión
@@ -130,7 +136,9 @@ app.post('/login', async (req, res) => {
 
 // Ruta para cerrar sesión
 app.get('/logout', (req, res) => {
-    req.session.destroy(() => res.redirect('/'));
+     req.session.destroy(() => {
+        res.render('login', { error: null, success: null });
+    });
 });
 
 app.post('/api/acciones', async (req, res) => {

@@ -15,32 +15,39 @@
     <div id="toast-container"></div>
 
     <h1 class="register">KUDEHEZI</h1>
-  <!--   <% if (error) { %>
+    <!--   <% if (error) { %>
         <p style="color:red;">
             <%= error %>
         </p>
         <% } %>
             -->
-            <div class="main-login">
-                <div class="container-login">
-                    <h2 class="register">Iniciar sesión</h2>
-                    <form action="/login" class="formulario" method="POST">
-                        <input type="email" name="email" placeholder="Email" required>
-                        <input type="password" name="password" placeholder="Password" required>
-                        <button type="submit" id="btnEnviar">Login</button>
-                    </form>
-                    <p>¿No tienes una cuenta? <a href="/register"> Regístrate aquí</a></p>
-                </div>
-            </div>
-            <script src="/app.js"></script>
+    <div class="main-login">
+        <div class="container-login">
+            <h2 class="register">Iniciar sesión</h2>
+            <form action="/login" class="formulario" method="POST">
+                <input type="email" name="email" placeholder="Correo electrónico" required>
+                <input type="password" name="password" placeholder="Contaseña" required>
+                <button type="submit" id="btnEnviar">Login</button>
+            </form>
+            <p>¿No tienes una cuenta? <a href="/register"> Regístrate aquí</a></p>
+        </div>
+    </div>
+    <script src="/app.js"></script>
 
-             <% if (error) { %>
+    <% if (error) { %>
         <script>
             window.addEventListener('DOMContentLoaded', () => {
                 showToast("<%= error %>");
             });
         </script>
-    <% } %>
+        <% } %>
+            <% if (typeof success !== 'undefined' && success) { %>
+                <script>
+                    window.addEventListener('DOMContentLoaded', () => {
+                        showToast("<%= success %>", 'success');
+                    });
+                </script>
+                <% } %>
 </body>
 
 </html>
