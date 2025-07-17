@@ -71,7 +71,11 @@ async function main() {
 
 app.get('/panel', (req, res) => {
     if (!req.session.user) return res.redirect('/');
-    res.render('panel', { user: req.session.user }); // Renderiza la vista 'panel.ejs' si el usuario está autenticado
+
+    const success = req.session.success;
+    delete req.session.success;
+
+    res.render('panel', { user: req.session.user, success });
 });
 
 // ruta para crear un usuario a traves de thunderclient
@@ -141,6 +145,7 @@ app.get('/logout', (req, res) => {
     });
 });
 
+// Ruta para mostrar el formulario de acción
 app.post('/api/acciones', async (req, res) => {
     try {
         const {
@@ -158,7 +163,7 @@ app.post('/api/acciones', async (req, res) => {
         } = req.body; // Extrae los datos del formulario
 
         //validación de campos obligatorios
-        if (!nombre || !asociacionEntidad || !email || !telefono || !fechaInicio || !fechaFin || !tipoAccion || !responsableAccion) {
+        if (!nombre || !asociacionEntidad || !telefono ) {
             return res.status(400).send('Faltan campos obligatorios');
         }
 
@@ -183,6 +188,7 @@ app.post('/api/acciones', async (req, res) => {
         const result = await collection.insertOne(accion);
         console.log('Acción insertada:', result.insertedId);
         /*  res.status(201).send('Acción insertada correctamente'); */
+        req.session.success = 'Acción agregada correctamente';
         res.redirect('/panel');
     } catch (error) {
         console.error('Error al insertar la acción', error);
@@ -223,9 +229,58 @@ app.get('/editar/:id', async (req, res) => {
     }
 });
 
+// Ruta para procesar el formulario de edición
+/*  app.post('/editar/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            nombre,
+            asociacionEntidad,
+            email,
+            telefono,
+            fechaInicio,
+            fechaFin,
+            horarios,
+            tipoAccion,
+            responsableAccion,
+            descripcion,
+            web
+        } = req.body;
+
+        const accionActualizada = {
+            nombre,
+            asociacionEntidad,
+            email,
+            telefono,
+            fechaInicio: new Date(fechaInicio),
+            fechaFin: new Date(fechaFin),
+            horarios,
+            tipoAccion,
+            responsableAccion,
+            descripcion,
+            web
+        };
+
+        const result = await db.collection('accion').updateOne(
+            { _id: new ObjectId(id) },
+            { $set: accionActualizada }
+        );
+
+        if (result.matchedCount === 1) {
+            req.session.success = 'Acción editada correctamente';
+            return res.redirect('/panel');
+        } else {
+            return res.status(404).send('Acción no encontrada');
+        }
+    } catch (error) {
+        console.error('Error al editar la acción:', error);
+        res.status(500).send('Error al editar la acción');
+    }
+}); */
+ 
 // Ruta para actualizar una acción
 // Esta ruta se usa para procesar el formulario de edición y actualizar los datos en la base de datos
-app.post('/api/acciones/:id', async (req, res) => {
+ app.post('/api/acciones/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const {
@@ -263,6 +318,7 @@ app.post('/api/acciones/:id', async (req, res) => {
 
         //Si se hace clic en editar pero no se cambia nada, igual se redirige normalmente a /panel.
         if (result.matchedCount === 1) {
+            req.session.success = 'Acción actualizada correctamente';
             res.redirect('/panel');
         } else {
             res.status(404).send('Acción no encontrada');
@@ -281,17 +337,15 @@ app.delete('/api/acciones/:id', async (req, res) => {
         const result = await collection.deleteOne({ _id: new ObjectId(id) }); // Elimina el documento con el ID proporcionado
         if (result.deletedCount === 1) {
             console.log('Acción eliminada', result);
-            res.status(200).json({ success: true, message: 'Acción eliminada correctamente' });
+             return res.json({ success: true, message: 'Acción eliminada correctamente' });
         } else {
-            res.status(404).json({ success: false, message: 'Acción no encontrada' });
+             return res.status(404).json({ success: false, message: 'Acción no encontrada' });
         }
     } catch (error) {
         console.error('Error al eliminar la acción:', error);
         res.status(500).json({ success: false, message: 'Error al eliminar la acción' });
     }
 });
-
-
 
 
 main();

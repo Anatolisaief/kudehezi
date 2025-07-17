@@ -38,16 +38,16 @@
                             <input type="text" name="asociacionEntidad" id="asociacionEntidad" required>
                         </label><br>
                         <label>Email:<br>
-                            <input type="email" name="email" id="email" required>
+                            <input type="email" name="email" id="email">
                         </label><br>
                         <label>Teléfono:<br>
-                            <input type="text" name="telefono" id="telefono" required>
+                            <input type="text" name="telefono" id="telefono">
                         </label><br>
                         <label>Fecha de inicio:<br>
-                            <input type="date" name="fechaInicio" id="fechaInicio" required>
+                            <input type="date" name="fechaInicio" id="fechaInicio">
                         </label><br>
                         <label>Fecha de fin:<br>
-                            <input type="date" name="fechaFin" id="fechaFin" required>
+                            <input type="date" name="fechaFin" id="fechaFin">
                         </label><br>
 
                     </div>
@@ -56,7 +56,7 @@
                             <input type="text" name="horarios" id="horarios">
                         </label><br>
                         <label>Tipo de acción:<br>
-                            <select name="tipoAccion" id="tipoAccion" required>
+                            <select name="tipoAccion" id="tipoAccion">
                                 <option value="consulta">Consulta</option>
                                 <option value="jornada/premio">Jornada/Premio</option>
                                 <option value="uso del espacio">Uso del espacio</option>
@@ -68,17 +68,21 @@
                         </label><br>
                         <label>Responsable de la acción:<br>
                             <div class="checkbox-group">
-                                
-                                <label for="Saregune"><input type="checkbox" name="responsableAccion" value="Saregune" id="Saregune"> Saregune</label>
 
-                                
-                                <label for="Elkarteak"><input type="checkbox" name="responsableAccion" value="Elkarteak" id="Elkarteak"> Elkarteak</label>
+                                <label for="Saregune"><input type="checkbox" name="responsableAccion" value="Saregune"
+                                        id="Saregune"> Saregune</label>
 
-                                
-                                <label for="Batekin"><input type="checkbox" name="responsableAccion" value="Batekin" id="Batekin"> Batekin</label>
 
-                                
-                                <label for="AuzoTV"><input type="checkbox" name="responsableAccion" value="AuzoTV" id="AuzoTV"> AuzoTV</label>
+                                <label for="Elkarteak"><input type="checkbox" name="responsableAccion" value="Elkarteak"
+                                        id="Elkarteak"> Elkarteak</label>
+
+
+                                <label for="Batekin"><input type="checkbox" name="responsableAccion" value="Batekin"
+                                        id="Batekin"> Batekin</label>
+
+
+                                <label for="AuzoTV"><input type="checkbox" name="responsableAccion" value="AuzoTV"
+                                        id="AuzoTV"> AuzoTV</label>
                             </div>
                         </label>
                         <label>Descripción:<br>
@@ -97,16 +101,25 @@
         </div>
 
     </div>
+   
 
     <div class="overlay"></div>
-    
+
     <dialog id="dialogo-confirmar">
         <p>¿Estás seguro de que quieres eliminar esta acción?</p>
         <button id="confirmarEliminar">Eliminar</button>
         <button id="cancelarEliminar">Cancelar</button>
     </dialog>
 
+     
+    <script>
+        window.successMessage = "<%= success || '' %>";
+        console.log(success);
+        
+    </script>
     <script src="/app.js"></script>
+    
+
 </body>
 
 </html>

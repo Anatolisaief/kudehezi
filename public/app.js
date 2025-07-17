@@ -297,6 +297,7 @@ function limpiarFormulario() {
 
 async function eliminarAccion(_id) {
     try {
+        
 
         // Desactiva botones para prevenir doble clic
         btnConfirmar.disabled = true;
@@ -316,8 +317,11 @@ async function eliminarAccion(_id) {
         console.log(data);
 
         if (data.success) {
-            obtenerAcciones(); // Refrescar la lista de acciones
+            obtenerAcciones();
+            showToast('Acción eliminada correctamente', 'success');
+           
         } else {
+            showToast('No se pudo eliminar la acción', 'error');
             console.error('Error al eliminar la acción:', data.message);
         }
     } catch (error) {
@@ -354,6 +358,7 @@ function showToast(message, type = 'error') {
     }, 3000);
 }
 
+
 btnConfirmar.addEventListener('click', (e) => {
     e.preventDefault(); // Evita el envío del formulario
 
@@ -367,4 +372,10 @@ btnCancelar.addEventListener('click', (e) => {
     e.preventDefault(); // Evita el envío del formulario
     dialogo.close(); // Cierra el diálogo de confirmación
     AccionAEliminarId = null; // Resetea el ID para evitar eliminar accidentalmente
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    if (window.successMessage) {
+        showToast(window.successMessage, 'success');
+    }
 });
