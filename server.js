@@ -58,7 +58,7 @@ async function main() {
 
         // Aquí define las rutas que usan `db`:
         app.get('/', (req, res) => {
-             res.render('login', { error: null, success: null });
+            res.render('login', { error: null, success: null });
         });
 
         app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
@@ -91,7 +91,7 @@ app.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     await db.collection('users').insertOne({
         nombre,
-        fechaNacimento: new Date(fechaNacimiento),
+        fechaNacimiento: new Date(fechaNacimiento),
         codigoPostal,
         telefono,
         email,
@@ -140,7 +140,7 @@ app.post('/login', async (req, res) => {
 
 // Ruta para cerrar sesión
 app.get('/logout', (req, res) => {
-     req.session.destroy(() => {
+    req.session.destroy(() => {
         res.render('login', { error: null, success: null });
     });
 });
@@ -163,7 +163,7 @@ app.post('/api/acciones', async (req, res) => {
         } = req.body; // Extrae los datos del formulario
 
         //validación de campos obligatorios
-        if (!nombre || !asociacionEntidad || !telefono ) {
+        if (!nombre || !asociacionEntidad || !telefono) {
             return res.status(400).send('Faltan campos obligatorios');
         }
 
@@ -198,14 +198,47 @@ app.post('/api/acciones', async (req, res) => {
 
 app.get('/api/acciones', async (req, res) => {
     try {
-        const collection = db.collection('accion'); // Selecciona la colección "accion"
-        // Obtiene todos los documentos de la colección "accion"
-        const accion = await collection.find({}).toArray();
-        console.log('accion:', accion);
-        res.status(200).json(accion);
+        const { tipo, responsable, ordenar, search } = req.query;
+        const filtros = [];
+
+        if (tipo && tipo !== 'todos') {
+            filtros.push({ tipoAccion: tipo });
+        }
+
+        if (responsable && responsable !== 'todos') {
+            filtros.push({ responsableAccion: responsable });
+        }
+
+        if (search && search.trim() !== '') {
+            const regex = new RegExp(search.trim(), 'i');
+            filtros.push({
+                $or: [
+                    { nombre: regex },
+                    { descripcion: regex },
+                    { asociacionEntidad: regex }
+                ]
+            });
+        }
+
+        const query = filtros.length > 0 ? { $and: filtros } : {};
+
+        const sort = {};
+        if (ordenar === 'fechaInicioAsc') sort.fechaInicio = 1;
+        else if (ordenar === 'fechaInicioDesc') sort.fechaInicio = -1;
+        else if (ordenar === 'nombreAsc') sort.nombre = 1;
+        else if (ordenar === 'nombreDesc') sort.nombre = -1;
+        else sort._id = -1;
+
+        const acciones = await db.collection('accion')
+            .find(query)
+            .collation({ locale: 'es', strength: 1 })
+            .sort(sort)
+            .toArray();
+
+        res.status(200).json(acciones);
     } catch (error) {
-        console.error('Error al obtener la acción:', error);
-        res.status(500).send('Error al obtener la acción');
+        console.error('Error al obtener las acciones:', error);
+        res.status(500).send('Error al obtener las acciones');
     }
 });
 
@@ -229,58 +262,10 @@ app.get('/editar/:id', async (req, res) => {
     }
 });
 
-// Ruta para procesar el formulario de edición
-/*  app.post('/editar/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const {
-            nombre,
-            asociacionEntidad,
-            email,
-            telefono,
-            fechaInicio,
-            fechaFin,
-            horarios,
-            tipoAccion,
-            responsableAccion,
-            descripcion,
-            web
-        } = req.body;
 
-        const accionActualizada = {
-            nombre,
-            asociacionEntidad,
-            email,
-            telefono,
-            fechaInicio: new Date(fechaInicio),
-            fechaFin: new Date(fechaFin),
-            horarios,
-            tipoAccion,
-            responsableAccion,
-            descripcion,
-            web
-        };
-
-        const result = await db.collection('accion').updateOne(
-            { _id: new ObjectId(id) },
-            { $set: accionActualizada }
-        );
-
-        if (result.matchedCount === 1) {
-            req.session.success = 'Acción editada correctamente';
-            return res.redirect('/panel');
-        } else {
-            return res.status(404).send('Acción no encontrada');
-        }
-    } catch (error) {
-        console.error('Error al editar la acción:', error);
-        res.status(500).send('Error al editar la acción');
-    }
-}); */
- 
 // Ruta para actualizar una acción
 // Esta ruta se usa para procesar el formulario de edición y actualizar los datos en la base de datos
- app.post('/api/acciones/:id', async (req, res) => {
+app.post('/api/acciones/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const {
@@ -337,9 +322,9 @@ app.delete('/api/acciones/:id', async (req, res) => {
         const result = await collection.deleteOne({ _id: new ObjectId(id) }); // Elimina el documento con el ID proporcionado
         if (result.deletedCount === 1) {
             console.log('Acción eliminada', result);
-             return res.json({ success: true, message: 'Acción eliminada correctamente' });
+            return res.json({ success: true, message: 'Acción eliminada correctamente' });
         } else {
-             return res.status(404).json({ success: false, message: 'Acción no encontrada' });
+            return res.status(404).json({ success: false, message: 'Acción no encontrada' });
         }
     } catch (error) {
         console.error('Error al eliminar la acción:', error);

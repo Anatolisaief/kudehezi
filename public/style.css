@@ -170,9 +170,9 @@ h2.register {
 }
 
 /* Cuando el formulario está activo, ocultar la lista */
-.formulario-activo .acciones-lista {
+/* .formulario-activo .acciones-lista {
     display: none;
-}
+} */
 
 /* Contenedor del formulario (oculto por defecto) */
 .formulario-container {
@@ -405,7 +405,7 @@ h2.register {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     z-index: 110;
 }
 

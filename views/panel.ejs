@@ -19,6 +19,49 @@
         <button id="toggle-formulario" type="button" class="toggle-btn">+ Agregar acción</button>
 
         <div class="content-wrapper">
+            <div class="filtros">
+                <label>
+                    Tipo de acción:
+                    <select id="filtroTipo">
+                        <option value="">Todos</option>
+                        <option value="consulta">Consulta</option>
+                        <option value="jornada/premio">Jornada/Premio</option>
+                        <option value="uso del espacio">Uso del espacio</option>
+                        <option value="reunión/coordinación">Reunión/Coordinación</option>
+                        <option value="servicio técnico">Servicio técnico</option>
+                        <option value="formación">Formación</option>
+                        <option value="otros">Otros</option>
+                    </select>
+                </label>
+
+                <label>
+                    Responsable:
+                    <select id="filtroResponsable">
+                        <option value="">Todos</option>
+                        <option value="Saregune">Saregune</option>
+                        <option value="Elkarteak">Elkarteak</option>
+                        <option value="Batekin">Batekin</option>
+                        <option value="AuzoTV">AuzoTV</option>
+                    </select>
+                </label>
+
+                <label>
+                    Ordenar por:
+                    <select id="ordenarPor">
+                        <option value="">Recientes</option>
+                        <option value="nombreAsc">Nombre A-Z</option>
+                        <option value="nombreDesc">Nombre Z-A</option>
+                        <option value="fechaInicioAsc">Fecha Inicio ↑</option>
+                        <option value="fechaInicioDesc">Fecha Inicio ↓</option>
+                    </select>
+                </label>
+                <label style="margin-left: 20px;">
+                    Buscar:
+                    <input type="text" id="buscar" placeholder="Teclea para buscar...">
+                </label>
+
+                <button id="aplicarFiltros">Aplicar</button>
+            </div>
             <div class="acciones-lista">
                 <div class="accion cabecera">
                 </div>
@@ -101,7 +144,7 @@
         </div>
 
     </div>
-   
+
 
     <div class="overlay"></div>
 
@@ -111,14 +154,14 @@
         <button id="cancelarEliminar">Cancelar</button>
     </dialog>
 
-     
+
     <script>
         window.successMessage = "<%= success || '' %>";
-        console.log(success);
-        
+        console.log(window.successMessage);
+
     </script>
     <script src="/app.js"></script>
-    
+
 
 </body>
 

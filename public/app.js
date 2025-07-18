@@ -1,3 +1,4 @@
+// Variables para manejar el formulario y la lista de acciones
 const formulario = document.querySelector('.formulario');
 const listaAcciones = document.querySelector('.acciones-lista');
 const idAccionInput = document.querySelector('#idAccion'); // Input oculto para el ID de la acción
@@ -14,16 +15,25 @@ const descripcionInput = document.querySelector('#descripcion');
 const webInput = document.querySelector('#web');
 const btnEnviar = document.querySelector('#btnEnviar');
 
-// dialog para confirmar eliminación
+// Dialog para confirmar eliminación
 let AccionAEliminarId = null; // Guardamos aquí el ID de la acción a eliminar
 const dialogo = document.getElementById('dialogo-confirmar');
 const btnConfirmar = document.getElementById('confirmarEliminar');
 const btnCancelar = document.getElementById('cancelarEliminar');
 
+// Botón para mostrar/ocultar el formulario
+const toggleBtn = document.getElementById('toggle-formulario');
+const body = document.body;
 
-async function obtenerAcciones() {
+const buscarInput = document.getElementById('buscar');
+
+
+// Función para obtener las acciones desde el servidor
+// Permite filtrar por tipo, responsable y ordenar por fecha
+async function obtenerAcciones(filtros = {}) {
     try {
-        const response = await fetch('/api/acciones');
+        const queryParams = new URLSearchParams(filtros).toString();
+        const response = await fetch(`/api/acciones?${queryParams}`);
         if (!response.ok) {
             throw new Error('Error al obtener las acciones');
         }
@@ -203,31 +213,14 @@ async function obtenerAcciones() {
 }
 
 //Evento que espera que cargue todo el html
-document.addEventListener("DOMContentLoaded", () => {
+/* document.addEventListener("DOMContentLoaded", () => {
     obtenerAcciones();
-});
+}); */
 
-
-// Botón para mostrar/ocultar el formulario
-const toggleBtn = document.getElementById('toggle-formulario');
-const body = document.body;
-
-toggleBtn.addEventListener('click', () => {
-    const abriendo = !body.classList.contains('formulario-activo');// Verifica si se está abriendo o cerrando el formulario
-
-    body.classList.toggle('formulario-activo');// Alterna la clase para mostrar/ocultar el formulario
-
-
-    if (abriendo) {
-        limpiarFormulario(); // Limpiar solo si estás abriendo
-        toggleBtn.textContent = '✕ Cerrar';
-    } else {
-        toggleBtn.textContent = '+ Agregar acción';
-    }// Cambia el texto del botón según el estado
-});
 
 
 // Función para cargar los datos de una acción en el formulario
+// Esta función se llama cuando se hace clic en el botón de editar
 function cargarFormulario(accion) {
 
     formulario.action = `/api/acciones/${accion._id}`;
@@ -274,6 +267,7 @@ function cargarFormulario(accion) {
 }
 
 // Función para limpiar el formulario
+// se llama al cerrar el formulario o al agregar una nueva acción
 function limpiarFormulario() {
     formulario.reset(); // Limpia todos los inputs
 
@@ -295,9 +289,11 @@ function limpiarFormulario() {
     btnEnviar.textContent = '+ Agregar acción';
 }
 
+// funcion para eliminar una acción
+// Esta función se llama cuando se confirma la eliminación en el diálogo
 async function eliminarAccion(_id) {
     try {
-        
+
 
         // Desactiva botones para prevenir doble clic
         btnConfirmar.disabled = true;
@@ -319,7 +315,7 @@ async function eliminarAccion(_id) {
         if (data.success) {
             obtenerAcciones();
             showToast('Acción eliminada correctamente', 'success');
-           
+
         } else {
             showToast('No se pudo eliminar la acción', 'error');
             console.error('Error al eliminar la acción:', data.message);
@@ -358,7 +354,7 @@ function showToast(message, type = 'error') {
     }, 3000);
 }
 
-
+// dialogo de confirmación para eliminar
 btnConfirmar.addEventListener('click', (e) => {
     e.preventDefault(); // Evita el envío del formulario
 
@@ -374,6 +370,46 @@ btnCancelar.addEventListener('click', (e) => {
     AccionAEliminarId = null; // Resetea el ID para evitar eliminar accidentalmente
 });
 
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const filtroTipo = document.getElementById('filtroTipo');
+    const filtroResponsable = document.getElementById('filtroResponsable');
+    const ordenarPor = document.getElementById('ordenarPor');
+    const btnAplicarFiltros = document.getElementById('aplicarFiltros');
+
+    btnAplicarFiltros.addEventListener('click', async () => {
+        const filtros = {
+            tipo: filtroTipo.value,
+            responsable: filtroResponsable.value,
+            ordenar: ordenarPor.value,
+            search: buscarInput.value.trim()
+        };
+
+        obtenerAcciones(filtros);
+    });
+
+    // Llamada inicial sin filtros
+    obtenerAcciones();
+});
+
+// Botón para mostrar/ocultar el formulario
+toggleBtn.addEventListener('click', () => {
+    const abriendo = !body.classList.contains('formulario-activo');// Verifica si se está abriendo o cerrando el formulario
+
+    body.classList.toggle('formulario-activo');// Alterna la clase para mostrar/ocultar el formulario
+
+
+    if (abriendo) {
+        limpiarFormulario(); // Limpiar solo si estás abriendo
+        toggleBtn.textContent = '✕ Cerrar';
+    } else {
+        toggleBtn.textContent = '+ Agregar acción';
+    }// Cambia el texto del botón según el estado
+});
+
+
+// Mostrar mensaje de éxito si existe
 window.addEventListener('DOMContentLoaded', () => {
     if (window.successMessage) {
         showToast(window.successMessage, 'success');
