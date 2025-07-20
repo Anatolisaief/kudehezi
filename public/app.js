@@ -86,6 +86,12 @@ async function obtenerAcciones(filtros = {}) {
             detallesExtra.classList.add('detalles-extra');
             detallesExtra.style.display = 'none';
 
+            const detallesExtraDatos = document.createElement('div');
+            detallesExtraDatos.classList.add('detalles-extra-datos');
+
+            const detallesExtraDescripcion = document.createElement('div');
+            detallesExtraDescripcion.classList.add('detalles-extra-descripcion');
+            
 
 
             const horarios = document.createElement('p');
@@ -116,12 +122,16 @@ async function obtenerAcciones(filtros = {}) {
             descripcion.setAttribute('data-label', 'Descripción');
             web.setAttribute('data-label', 'Web');
 
+            
             // Añadir los secundarios al contenedor oculto
-            detallesExtra.appendChild(horarios);
-            detallesExtra.appendChild(tipo);
-            detallesExtra.appendChild(responsable);
-            detallesExtra.appendChild(descripcion);
-            detallesExtra.appendChild(web);
+            detallesExtraDatos.appendChild(horarios);
+            detallesExtraDatos.appendChild(tipo);
+            detallesExtraDatos.appendChild(responsable);
+            detallesExtraDatos.appendChild(web);
+            detallesExtraDescripcion.appendChild(descripcion);
+           
+            detallesExtra.appendChild(detallesExtraDatos);
+            detallesExtra.appendChild(detallesExtraDescripcion);
 
             // Crear botón de toggle
             const btnToggle = document.createElement('button');

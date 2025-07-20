@@ -9,7 +9,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(to right, #effafd, #ceecfa);
+    background: linear-gradient(to left, #fcfdef, #ceecfa);
     padding: 20px;
     min-height: 100vh;
     color: #333;
@@ -113,6 +113,47 @@ h2.register {
 
 
 /* panel */
+
+/* filtros */
+.filtros {
+    display: flex;
+   justify-content: center;
+
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filtros select,
+.filtros input[type="text"] {
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.filtros select:focus,
+.filtros input[type="text"]:focus { 
+    border-color: #2c79ad;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+.filtros button {
+    padding: 6px 12px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filtros button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);        
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}   
 /* Contenedor principal */
 .main-layout {
     display: flex;
@@ -169,10 +210,11 @@ h2.register {
     transition: all 0.3s ease;
 }
 
-/* Cuando el formulario está activo, ocultar la lista */
-/* .formulario-activo .acciones-lista {
-    display: none;
-} */
+.cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 10; /* para que quede por encima del resto */
+}
 
 /* Contenedor del formulario (oculto por defecto) */
 .formulario-container {
@@ -202,8 +244,6 @@ h2.register {
 .accion {
     display: flex;
     flex-direction: column;
-    /* Elementos en columna */
-    /*  padding: 12px 0; */
     padding: 10px 0;
     background-color: #efefef;
     border-bottom: 1px solid #c6c6c6;
@@ -215,7 +255,7 @@ h2.register {
 .accion.cabecera {
     display: flex;
     flex-direction: row;
-    background: #567e9c;
+    background: #1c5a91;
     padding: 15px 0;
     margin-bottom: 10px;
     border-radius: 6px;
@@ -227,7 +267,6 @@ h2.register {
 .accion>* {
     flex: 1;
     min-width: 100px;
-    /* padding: 0 5px; */
     text-align: center;
     font-size: 1rem;
     font-weight: 600;
@@ -235,7 +274,10 @@ h2.register {
 
 .accion.cabecera>* {
     color: white;
-    /* texto blanco para la cabecera */
+}
+
+[data-label]::before {
+  font-style: italic;
 }
 
 .accion>* {
@@ -264,12 +306,13 @@ h2.register {
     border: none;
     cursor: pointer;
     font-size: 1.5rem;
-    margin: 0 5px;
+    color: #194f74;
 }
 
 
 .btn-editar:hover i,
-.btn-eliminar:hover i {
+.btn-eliminar:hover i,
+.btn-toggle-detalles:hover i {
     opacity: 0.7;
 }
 
@@ -304,9 +347,7 @@ h2.register {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
     display: flex;
-    /* Cambiamos grid por flex */
     flex-wrap: wrap;
-    /* Permitir que los elementos se envuelvan */
     gap: 30px;
 }
 
@@ -418,7 +459,6 @@ h2.register {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    /* gap: 10px; */
 }
 
 .detalles>* {
@@ -433,11 +473,17 @@ h2.register {
 .detalles-extra {
     display: none;
     /* Oculto por defecto */
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     background: #efefef;
     margin-top: 25px;
-    /* margin-bottom: 15px; */
+}
+
+.detalles-extra-datos {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  
 }
 
 /* Estilos para cada elemento dentro de detalles-extra */
@@ -489,9 +535,9 @@ h2.register {
 .divBotones {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
     align-items: center;
-    color: #2c3e50;
+   
 }
 
 /* dialogo */

@@ -196,6 +196,7 @@ app.post('/api/acciones', async (req, res) => {
     }
 });
 
+// Ruta para obtener todas las acciones
 app.get('/api/acciones', async (req, res) => {
     try {
         const { tipo, responsable, ordenar, search } = req.query;
