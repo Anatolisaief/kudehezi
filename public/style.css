@@ -17,6 +17,13 @@ body {
 
 /* register y login*/
 
+body.modo-edicion #toggle-formulario {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+}
+
 .main-register,
 .main-login {
     display: flex;
@@ -236,6 +243,12 @@ h2.register {
 .formulario-activo .formulario-container {
     display: flex;
     justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
 }
 
 /* Estilos para las acciones */
@@ -319,7 +332,7 @@ h2.register {
 /* Botón toggle */
 .toggle-btn {
     align-self: flex-end;
-    margin: 20px;
+    
     padding: 12px 20px;
     background-color: #3498db;
     color: white;

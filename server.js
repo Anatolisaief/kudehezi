@@ -174,8 +174,8 @@ app.post('/api/acciones', async (req, res) => {
             email,
             telefono,
             fechaInsercion: new Date(),
-            fechaInicio: new Date(fechaInicio),
-            fechaFin: new Date(fechaFin),
+            fechaInicio: fechaInicio ? new Date(fechaInicio) : null, //las fechas se convierten a Date si existen
+            fechaFin: fechaFin ? new Date(fechaFin) : null,
             horarios,
             tipoAccion,
             responsableAccion,
@@ -187,7 +187,6 @@ app.post('/api/acciones', async (req, res) => {
         // Inserta un nuevo documento en la colección "accion"
         const result = await collection.insertOne(accion);
         console.log('Acción insertada:', result.insertedId);
-        /*  res.status(201).send('Acción insertada correctamente'); */
         req.session.success = 'Acción agregada correctamente';
         res.redirect('/panel');
     } catch (error) {
@@ -202,6 +201,7 @@ app.get('/api/acciones', async (req, res) => {
         const { tipo, responsable, ordenar, search } = req.query;
         const filtros = [];
 
+        //filtros de busqueda
         if (tipo && tipo !== 'todos') {
             filtros.push({ tipoAccion: tipo });
         }
@@ -210,6 +210,7 @@ app.get('/api/acciones', async (req, res) => {
             filtros.push({ responsableAccion: responsable });
         }
 
+        //filtro de busqueda por texto
         if (search && search.trim() !== '') {
             const regex = new RegExp(search.trim(), 'i');
             filtros.push({
@@ -288,8 +289,8 @@ app.post('/api/acciones/:id', async (req, res) => {
             asociacionEntidad,
             email,
             telefono,
-            fechaInicio: new Date(fechaInicio),
-            fechaFin: new Date(fechaFin),
+            fechaInicio: fechaInicio ? new Date(fechaInicio) : null, //las fechas se convierten a Date si existen
+            fechaFin: fechaFin ? new Date(fechaFin) : null,
             horarios,
             tipoAccion,
             responsableAccion,

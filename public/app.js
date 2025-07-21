@@ -75,11 +75,16 @@ async function obtenerAcciones(filtros = {}) {
             const telefono = document.createElement('p');
             telefono.textContent = accion.telefono;
 
+            function formatearFecha(fecha) {
+                const f = new Date(fecha);
+                return (fecha && !isNaN(f)) ? f.toLocaleDateString() : 'No definida';
+            }
+
             const fechaInicio = document.createElement('p');
-            fechaInicio.textContent = new Date(accion.fechaInicio).toLocaleDateString();
+            fechaInicio.textContent = formatearFecha(accion.fechaInicio);
 
             const fechaFin = document.createElement('p');
-            fechaFin.textContent = new Date(accion.fechaFin).toLocaleDateString();
+            fechaFin.textContent = formatearFecha(accion.fechaFin);
 
             // campos ocultos por defecto
             const detallesExtra = document.createElement('div');
@@ -91,7 +96,7 @@ async function obtenerAcciones(filtros = {}) {
 
             const detallesExtraDescripcion = document.createElement('div');
             detallesExtraDescripcion.classList.add('detalles-extra-descripcion');
-            
+
 
 
             const horarios = document.createElement('p');
@@ -122,14 +127,14 @@ async function obtenerAcciones(filtros = {}) {
             descripcion.setAttribute('data-label', 'Descripción');
             web.setAttribute('data-label', 'Web');
 
-            
+
             // Añadir los secundarios al contenedor oculto
             detallesExtraDatos.appendChild(horarios);
             detallesExtraDatos.appendChild(tipo);
             detallesExtraDatos.appendChild(responsable);
             detallesExtraDatos.appendChild(web);
             detallesExtraDescripcion.appendChild(descripcion);
-           
+
             detallesExtra.appendChild(detallesExtraDatos);
             detallesExtra.appendChild(detallesExtraDescripcion);
 
@@ -178,6 +183,8 @@ async function obtenerAcciones(filtros = {}) {
                 cargarFormulario(accion)
                 body.classList.add('formulario-activo');
                 toggleBtn.textContent = '✕ Cerrar';
+                toggleBtn.style.position = 'fixed';
+
             });
 
             // Botón de eliminar
@@ -297,6 +304,7 @@ function limpiarFormulario() {
 
     // Restaurar texto del botón de envío
     btnEnviar.textContent = '+ Agregar acción';
+
 }
 
 // funcion para eliminar una acción
@@ -411,11 +419,14 @@ toggleBtn.addEventListener('click', () => {
 
 
     if (abriendo) {
-        limpiarFormulario(); // Limpiar solo si estás abriendo
+        limpiarFormulario(); // Limpiar solo si estás agregando una nueva acción
         toggleBtn.textContent = '✕ Cerrar';
+        toggleBtn.style.position = 'fixed'; // Cambiar posición al abrir
     } else {
         toggleBtn.textContent = '+ Agregar acción';
-    }// Cambia el texto del botón según el estado
+        toggleBtn.style.position = ''; // Resetear posición
+
+    }
 });
 
 
